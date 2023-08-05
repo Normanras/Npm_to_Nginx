@@ -18,23 +18,30 @@ Whether you follow Christian away from NPM or not, it dawned on me that while NP
 
 ### TL;DR - Quick Steps
 
-1. Copy the following contents (including sub-directories) from the NPM `/data/nginx` directory to the Nginx `/etc/nginx` folder:
+1. Stop both NPM and Nginx first.
+    * `systemctl stop nginx`
+    * `docker stop npm` (or whatever you've named the container).
+
+2. Copy the following contents (including sub-directories) from the NPM `/data/nginx` directory to the Nginx `/etc/nginx` folder:
 
     * `proxy_hosts` >  `sites-available`
     * `conf.d` > `conf.d`
     * `snippets` > `snippets`
     * `custom_ssl` > `custom_ssl` (if applicable)
 
-2. Edit each file in your `sites-available` directory and update the paths. Most will change from `/data/nginx/` to `/etc/nginx`.
-3. Edit your `nginx.conf` file and ensure the following two paths are there:
+3. Edit each file in your `sites-available` directory and update the paths. Most will change from `/data/nginx/` to `/etc/nginx`.
+
+4. Edit your `nginx.conf` file and ensure the following two paths are there:
 
     * `include /etc/nginx/conf.d/*.conf;` and `include /etc/nginx/sites-enabled/*;`
 
-4. Symlink the proxy host files in `sites-available` to `sites-enabled`
+5. Symlink the proxy host files in `sites-available` to `sites-enabled`
 
     * `ln -s * ./sites-enabled`
 
-5. Test your changes with `nginx -t`. Make appropriate changes if there are error messages.
+6. Test your changes with `nginx -t`. Make appropriate changes if there are error messages.
+
+And that's it! You can now start Nginx and check for any errors using `systemctl status nginx`.
 
 ### Pre-requisites & Assumptions
 
